@@ -18,7 +18,14 @@ class TabsMixin(object):
             css['all'] = []
         css['all'].extend(self.DJANGO_VUE_TABS_CSS)
         js = super(TabsMixin, self).media._js
-        if settings.DJANGO_VUE_TABS_USE_VUE_JS:
+        dj_field_filemanager_loaded = (
+            settings.DJ_FIELD_FILEMANAGER_INSTALLED
+            and hasattr(self, 'FIELD_FILEMANAGER_JS')
+        )
+        if (
+            not dj_field_filemanager_loaded
+            and settings.DJANGO_VUE_TABS_USE_VUE_JS
+        ):
             js.append('django_vue_tabs/vue-2.6.11.min.js')
         js += self.DJANGO_VUE_TABS_JS
         return forms.Media(css=css, js=js)
